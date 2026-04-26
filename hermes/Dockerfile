@@ -24,12 +24,9 @@ RUN pip install --no-cache-dir uv
 # Install playwright and browsers
 RUN uv pip install playwright && playwright install --with-deps chromium
 
-# Clone and install hermes-agent
-RUN git init \
-    && git remote add origin https://github.com/NousResearch/hermes-agent.git \
-    && git fetch --depth 1 origin bf196a3fc0fd1f79353369e8732051db275c6276 \
-    && git checkout FETCH_HEAD \
-    && rm -rf .git
+# Download hermes-agent source (no git history)
+RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/bf196a3fc0fd1f79353369e8732051db275c6276.tar.gz \
+    | tar xz --strip-components=1
 
 # Install hermes-agent in venv
 RUN uv pip install --no-cache .
