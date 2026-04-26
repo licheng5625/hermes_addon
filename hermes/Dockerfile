@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     bash \
     jq \
+    libopus0 \
+    libsodium23 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -29,7 +32,7 @@ RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/9be83728a67c79
     | tar xz --strip-components=1
 
 # Install hermes-agent in venv
-RUN uv pip install --no-cache . discord.py
+RUN uv pip install --no-cache . "discord.py[voice]" PyNaCl
 
 # Install WhatsApp bridge dependencies
 WORKDIR /app/scripts/whatsapp-bridge
