@@ -24,13 +24,14 @@ RUN pip install --no-cache-dir uv
 # Install playwright and browsers
 RUN uv pip install playwright && playwright install --with-deps chromium
 
+# Clone and install hermes-agent
 RUN git init \
-    && git remote add origin https://github.com/licheng5625/nanobot.git \
-    && git fetch --depth 1 origin 8ff44708bfabb274c481f11141e485c7ba30fa79 \
+    && git remote add origin https://github.com/NousResearch/hermes-agent.git \
+    && git fetch --depth 1 origin bf196a3fc0fd1f79353369e8732051db275c6276 \
     && git checkout FETCH_HEAD \
     && rm -rf .git
 
-# Install nanobot in venv
+# Install hermes-agent in venv
 RUN uv pip install --no-cache .
 
 # Build WhatsApp bridge
@@ -39,7 +40,7 @@ RUN npm install && npm run build
 WORKDIR /app
 
 # Create config directory
-RUN mkdir -p /root/.nanobot
+RUN mkdir -p /root/.hermes
 
 # Copy run script
 COPY run.sh /run.sh

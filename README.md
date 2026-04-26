@@ -21,12 +21,12 @@ Self-improving AI assistant powered by [Hermes Agent](https://hermes-agent.nousr
 
 2. Install the **"Nanobot AI Assistant"** add-on
 
-3. Create the config file at `/homeassistant/nanobot/config.json`:
+3. Create the config file at `/homeassistant/hermes/config.json`:
    ```json
    {
      "agents": {
        "defaults": {
-         "workspace": "~/.nanobot/workspace",
+         "workspace": "~/.hermes/workspace",
          "model": "claude-sonnet-4-20250514",
          "max_tokens": 8192,
          "temperature": 0.7

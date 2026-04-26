@@ -1,40 +1,39 @@
 #!/bin/bash
 set -e
 
-CONFIG_DIR=/config/nanobot
+CONFIG_DIR=/config/hermes
 # Create directories
 mkdir -p $CONFIG_DIR/workspace
 mkdir -p $CONFIG_DIR/sessions
 
-# Link /root/.nanobot to /config/nanobot (HA's /homeassistant/nanobot/)
-rm -rf /root/.nanobot
-ln -sf $CONFIG_DIR /root/.nanobot
+# Link /root/.hermes to /config/hermes (HA's /homeassistant/hermes/)
+rm -rf /root/.hermes
+ln -sf $CONFIG_DIR /root/.hermes
 
 # Check if config exists
 if [ ! -f "$CONFIG_DIR/config.json" ]; then
     echo "Error: Config file not found"
-    echo "Please create /homeassistant/nanobot/config.json"
+    echo "Please create /homeassistant/hermes/config.json"
     echo ""
     echo "Example config:"
     cat << 'EOF'
 {
   "agents": {
     "defaults": {
-      "workspace": "~/.nanobot/workspace",
+      "workspace": "~/.hermes/workspace",
       "model": "claude-sonnet-4-20250514",
       "max_tokens": 8192,
       "temperature": 0.7
     }
   },
   "providers": {
-    "vllm": {
-      "api_key": "your-api-key",
-      "api_base": "http://localhost:3030/v1"
+    "anthropic": {
+      "api_key": "your-api-key"
     }
   },
   "channels": {
     "homeassistant": {
-      "enabled": false
+      "enabled": true
     },
     "telegram": { "enabled": false },
     "whatsapp": { "enabled": false }
@@ -48,7 +47,7 @@ EOF
     exit 1
 fi
 
-echo "Config: /homeassistant/nanobot/config.json"
-echo "Starting nanobot gateway..."
+echo "Config: /homeassistant/hermes/config.json"
+echo "Starting hermes gateway..."
 
-exec nanobot gateway
+exec hermes gateway

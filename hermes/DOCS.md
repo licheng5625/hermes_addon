@@ -14,7 +14,7 @@ Self-improving AI assistant powered by [Hermes Agent](https://hermes-agent.nousr
 
 ## Configuration
 
-Hermes Agent uses a `config.json` file located at `/homeassistant/nanobot/config.json` on your Home Assistant host.
+Hermes Agent uses a `config.json` file located at `/homeassistant/hermes/config.json` on your Home Assistant host.
 
 ### Minimal Example
 
@@ -22,7 +22,7 @@ Hermes Agent uses a `config.json` file located at `/homeassistant/nanobot/config
 {
   "agents": {
     "defaults": {
-      "workspace": "~/.nanobot/workspace",
+      "workspace": "~/.hermes/workspace",
       "model": "claude-sonnet-4-20250514",
       "max_tokens": 8192,
       "temperature": 0.7
@@ -50,7 +50,7 @@ Hermes Agent uses a `config.json` file located at `/homeassistant/nanobot/config
 | Key | Default | Description |
 |-----|---------|-------------|
 | `agents.defaults.model` | — | LLM model name (e.g., `claude-sonnet-4-20250514`, `google/gemini-2.5-flash`) |
-| `agents.defaults.workspace` | `~/.nanobot/workspace` | Working directory for the agent |
+| `agents.defaults.workspace` | `~/.hermes/workspace` | Working directory for the agent |
 | `agents.defaults.max_tokens` | `8192` | Maximum tokens per response |
 | `agents.defaults.temperature` | `0.7` | LLM temperature (0.0–1.0) |
 
@@ -160,17 +160,17 @@ For the full Hermes Agent configuration reference (memory, compression, TTS, bro
 
 ## Data Location
 
-All persistent data is stored under `/homeassistant/nanobot/` on your Home Assistant host:
+All persistent data is stored under `/homeassistant/hermes/` on your Home Assistant host:
 
 | Path | Description |
 |------|-------------|
-| `/homeassistant/nanobot/config.json` | Main configuration file |
-| `/homeassistant/nanobot/workspace/` | Agent workspace directory |
-| `/homeassistant/nanobot/sessions/` | Chat session history |
+| `/homeassistant/hermes/config.json` | Main configuration file |
+| `/homeassistant/hermes/workspace/` | Agent workspace directory |
+| `/homeassistant/hermes/sessions/` | Chat session history |
 
 ## Troubleshooting
 
-- **No config file**: The add-on will print an example configuration and exit. Create `config.json` at the path shown above.
+- **No config file**: The add-on will print an example configuration and exit. Create `config.json` at `/homeassistant/hermes/config.json`.
 - **WhatsApp QR code**: Check the add-on logs tab in Home Assistant to find the QR code for scanning.
 - **Connection issues**: Ensure `host_network` is enabled (default) and port `18790` is accessible.
 - **API errors**: Verify your API key and endpoint URL in the provider configuration.
