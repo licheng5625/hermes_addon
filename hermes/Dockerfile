@@ -25,11 +25,11 @@ RUN pip install --no-cache-dir uv
 RUN uv pip install playwright && playwright install --with-deps chromium
 
 # Download hermes-agent source (no git history)
-RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/bf196a3fc0fd1f79353369e8732051db275c6276.tar.gz \
+RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/9be83728a67c794daa20c553919f4869675a2edc.tar.gz \
     | tar xz --strip-components=1
 
 # Install hermes-agent in venv
-RUN uv pip install --no-cache .
+RUN uv pip install --no-cache . discord.py
 
 # Install WhatsApp bridge dependencies
 WORKDIR /app/scripts/whatsapp-bridge

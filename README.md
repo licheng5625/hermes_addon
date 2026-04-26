@@ -19,58 +19,49 @@ Self-improving AI assistant powered by [Hermes Agent](https://hermes-agent.nousr
    https://github.com/licheng5625/hermes_addon
    ```
 
-2. Install the **"Nanobot AI Assistant"** add-on
+2. Install the **"Hermes Agent"** add-on
 
-3. Create the config file at `/homeassistant/hermes/config.json`:
-   ```json
-   {
-     "agents": {
-       "defaults": {
-         "workspace": "~/.hermes/workspace",
-         "model": "claude-sonnet-4-20250514",
-         "max_tokens": 8192,
-         "temperature": 0.7
-       }
-     },
-     "providers": {
-       "anthropic": {
-         "api_key": "your-api-key"
-       }
-     },
-     "channels": {
-       "homeassistant": { "enabled": true },
-       "telegram": { "enabled": false },
-       "whatsapp": { "enabled": false }
-     },
-     "gateway": {
-       "host": "0.0.0.0",
-       "port": 18790
-     }
-   }
+3. Start the add-on — it will auto-generate config templates and exit on first run
+
+4. Edit `/homeassistant/hermes/.env` with your API key:
+   ```bash
+   ANTHROPIC_API_KEY="sk-ant-..."
    ```
 
-4. Start the add-on
+5. Restart the add-on
+
+That's it. Home Assistant integration is auto-enabled. The default `config.yaml` is generated automatically:
+
+```yaml
+model:
+  provider: "anthropic"
+  default: "claude-sonnet-4-20250514"
+  max_tokens: 8192
+  temperature: 0.7
+```
 
 ## Using a Local LLM
 
-To use a local/self-hosted model instead of a cloud API, point the provider to your local endpoint:
+Edit `.env`:
+```bash
+OPENAI_API_KEY="any-value"
+OPENAI_BASE_URL="http://192.168.0.134:3030/v1"
+```
 
-```json
-"providers": {
-  "vllm": {
-    "api_key": "any-value",
-    "api_base": "http://192.168.0.134:3030/v1"
-  }
-}
+Edit `config.yaml`:
+```yaml
+model:
+  provider: "openai"
+  default: "your-model-name"
 ```
 
 ## Channel Setup
 
 | Channel | Setup |
 |---------|-------|
-| **Home Assistant** | Set `"homeassistant": { "enabled": true }` — enables entity control tools |
-| **Telegram** | Get a bot token from [@BotFather](https://t.me/BotFather), add token and allowed user IDs |
-| **WhatsApp** | Enable in config, scan the QR code from the add-on logs |
+| **Home Assistant** | Auto-enabled (no config needed) |
+| **Telegram** | Add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_ALLOWED_USERS` to `.env`, enable in `config.yaml` |
+| **WhatsApp** | Enable in `config.yaml`, scan the QR code from the add-on logs |
 
 ## Documentation
 

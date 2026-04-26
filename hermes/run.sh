@@ -20,25 +20,25 @@ if [ ! -f "$CONFIG_DIR/config.yaml" ]; then
     echo "  Notice: config.yaml not found. Creating..."
     echo "============================================"
     cat << 'EOF' > "$CONFIG_DIR/config.yaml"
-workspace: "~/.hermes/workspace"
+# Hermes Agent config — see https://hermes-agent.nousresearch.com/docs/user-guide/configuration
 
 model:
-  provider: "anthropic"
-  default: "claude-sonnet-4-20250514"
-  max_tokens: 8192
-  temperature: 0.7
+  default: "claude-sonnet-4-5-20250929"
+  provider: "custom"
+  base_url: "http://127.0.0.1:3030/v1"
+  # api_key from .env → OPENAI_API_KEY
 
-gateway:
-  host: "0.0.0.0"
-  port: 18790
-  platforms:
-    homeassistant:
-      enabled: true
-      watch_all: true
-    telegram:
-      enabled: false
-    whatsapp:
-      enabled: false
+agent:
+  reasoning_effort: "high"
+  max_turns: 50
+
+# Home Assistant platform is auto-enabled via HASS_TOKEN env var (set by the add-on).
+# Uncomment below to enable additional platforms:
+# platforms:
+#   telegram:
+#     enabled: true
+#   whatsapp:
+#     enabled: true
 EOF
     echo "Created default config.yaml at /homeassistant/hermes/config.yaml"
 fi
@@ -49,18 +49,28 @@ if [ ! -f "$CONFIG_DIR/.env" ]; then
     echo "  Warning: .env not found. Creating template..."
     echo "============================================"
     cat << 'EOF' > "$CONFIG_DIR/.env"
-# Please enter your real API key here (restart service after editing)
-ANTHROPIC_API_KEY="your-api-key"
+# LLM API key (used by the custom provider in config.yaml)
+OPENAI_API_KEY="your-api-key"
+
+# Or use Anthropic directly:
+# ANTHROPIC_API_KEY="sk-ant-..."
+
+# ==========================================
+# API Server (public access on 0.0.0.0:8642)
+# Generate a key: openssl rand -hex 32
+# ==========================================
+API_SERVER_KEY="your-random-secret-key"
+API_SERVER_HOST="0.0.0.0"
+# API_SERVER_PORT="8642"
 
 # ==========================================
 # Additional channel configurations
-# (Fill based on enabled platforms in config.yaml)
 # ==========================================
-# Home Assistant Token
-# HASS_TOKEN="your-home-assistant-long-lived-access-token"
-# HASS_URL="http://homeassistant.local:8123"
+# Discord
+# DISCORD_TOKEN="your-discord-bot-token"
+# DISCORD_ALLOWED_USERS="user_id_1,user_id_2"
 
-# Telegram Token
+# Telegram
 # TELEGRAM_BOT_TOKEN="123456:ABC-DEF..."
 # TELEGRAM_ALLOWED_USERS="123456789"
 EOF
@@ -70,10 +80,16 @@ EOF
     exit 1
 fi
 
+if [ -n "$SUPERVISOR_TOKEN" ]; then
+    export HASS_TOKEN="$SUPERVISOR_TOKEN"
+    export HASS_URL="http://supervisor/core/api"
+    echo "Home Assistant integration: enabled (auto-detected)"
+fi
+
 # 5. Start the service
 echo "Config Loaded: /homeassistant/hermes/config.yaml"
 echo "Secrets Loaded: /homeassistant/hermes/.env"
 echo "Starting hermes gateway..."
 
 # Note: Use 'hermes gateway' or 'hermes gateway start' depending on your CLI version
-exec hermes gateway start
+exec hermes gateway run
