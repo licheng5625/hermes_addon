@@ -34,9 +34,9 @@ RUN git init \
 # Install hermes-agent in venv
 RUN uv pip install --no-cache .
 
-# Build WhatsApp bridge
-WORKDIR /app/bridge
-RUN npm install && npm run build
+# Install WhatsApp bridge dependencies
+WORKDIR /app/scripts/whatsapp-bridge
+RUN npm install
 WORKDIR /app
 
 # Create config directory
