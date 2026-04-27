@@ -19,20 +19,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Create virtual environment and install uv
+# Create virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir uv
 
-# Install playwright and browsers
-RUN uv pip install playwright && playwright install --with-deps chromium
+# Copy requirements file
+COPY requirements.txt /tmp/requirements.txt
+
+# Install Python dependencies from requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Install playwright browsers
+RUN playwright install --with-deps chromium
 
 # Download hermes-agent source (no git history)
 RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/9be83728a67c794daa20c553919f4869675a2edc.tar.gz \
     | tar xz --strip-components=1
 
 # Install hermes-agent in venv
-RUN uv pip install --no-cache . "discord.py[voice]" PyNaCl
+RUN uv pip install --no-cache .
 
 # Install WhatsApp bridge dependencies
 WORKDIR /app/scripts/whatsapp-bridge

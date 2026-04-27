@@ -1,0 +1,9 @@
+# Core dependencies
+uv
+
+# Browser automation
+playwright
+
+# Discord integration with voice support
+discord.py[voice]
+PyNaCl
