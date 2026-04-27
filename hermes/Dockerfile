@@ -15,24 +15,40 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libopus0 \
     libsodium23 \
     ffmpeg \
+    wget \
+    gpg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install GitHub CLI
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+    && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt-get update \
+    && apt-get install -y gh \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Create virtual environment and install uv
+# Create virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir uv
 
-# Install playwright and browsers
-RUN uv pip install playwright && playwright install --with-deps chromium
+# Copy requirements file
+COPY requirements.txt /tmp/requirements.txt
+
+# Install Python dependencies from requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Install playwright browsers
+RUN playwright install --with-deps chromium
 
 # Download hermes-agent source (no git history)
 RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/9be83728a67c794daa20c553919f4869675a2edc.tar.gz \
     | tar xz --strip-components=1
 
 # Install hermes-agent in venv
-RUN uv pip install --no-cache . "discord.py[voice]" PyNaCl
+RUN uv pip install --no-cache .
 
 # Install WhatsApp bridge dependencies
 WORKDIR /app/scripts/whatsapp-bridge
