@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     wget \
     gpg \
+    sshpass \
     && rm -rf /var/lib/apt/lists/*
 
 # Install GitHub CLI
