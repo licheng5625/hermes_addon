@@ -1,5 +1,15 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-debian:trixie
-FROM $BUILD_FROM
+FROM ghcr.io/home-assistant/base-debian:trixie
+
+# OCI labels (replaces legacy io.hass.* labels from build.yaml)
+LABEL \
+    io.hass.name="Hermes Agent" \
+    io.hass.description="Self-improving AI assistant powered by Hermes Agent from Nous Research" \
+    io.hass.type="addon" \
+    io.hass.url="https://github.com/licheng5625/hermes_addon" \
+    org.opencontainers.image.title="Hermes Agent" \
+    org.opencontainers.image.description="Self-improving AI assistant powered by Hermes Agent from Nous Research" \
+    org.opencontainers.image.source="https://github.com/licheng5625/hermes_addon" \
+    org.opencontainers.image.licenses="Apache-2.0"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
