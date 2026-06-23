@@ -55,7 +55,7 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN playwright install --with-deps chromium
 
 # Download hermes-agent source (no git history)
-RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/498bfc7bc12a937621b4215312049b1000726df3.tar.gz \
+RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/2bd1977d8fad185c9b4be47884f7e87f1add0ce3.tar.gz \
     | tar xz --strip-components=1
 
 # Install hermes-agent in venv
