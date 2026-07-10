@@ -91,5 +91,10 @@ echo "Config Loaded: /homeassistant/hermes/config.yaml"
 echo "Secrets Loaded: /homeassistant/hermes/.env"
 echo "Starting hermes gateway..."
 
+# The HA base image uses s6-overlay as PID 1. Hermes detects s6 and tries to
+# dispatch through the s6 service manager (which requires a registered slot).
+# We run the gateway directly in foreground — skip the s6 redirect.
+export HERMES_GATEWAY_NO_SUPERVISE=1
+
 # Note: Use 'hermes gateway' or 'hermes gateway start' depending on your CLI version
 exec hermes gateway run
