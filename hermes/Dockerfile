@@ -58,8 +58,14 @@ RUN playwright install --with-deps chromium
 RUN curl -sL https://github.com/NousResearch/hermes-agent/archive/29112bef099274229cadff79cdff7bf7b99c4b77.tar.gz \
     | tar xz --strip-components=1
 
-# Install hermes-agent in venv
-RUN uv pip install --no-cache .
+# Install hermes-agent in venv.
+# Upstream (>=0.18) removed the [build-system] table and turned setup.py into a
+# guard that raises on bdist_wheel/sdist unless HERMES_NIX_BUILD=1, so a plain
+# `uv pip install .` (PEP 517 wheel build) now fails. Editable installs use the
+# build_editable hook, which the guard does not block — and it lets Hermes
+# resolve its bundled assets (locales, skills, web_dist, ...) from the /app
+# source checkout, which is the upstream-intended layout.
+RUN uv pip install --no-cache -e .
 
 # Install WhatsApp bridge dependencies
 WORKDIR /app/scripts/whatsapp-bridge

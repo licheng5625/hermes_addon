@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-CONFIG_DIR=/config/hermes
+# Mapped via config.yaml `homeassistant_config:rw` → the HA config dir is
+# mounted at /homeassistant (the deprecated `config` mount at /config is gone).
+CONFIG_DIR=/homeassistant/hermes
 
 # 1. Ensure required directories exist
 mkdir -p $CONFIG_DIR/workspace

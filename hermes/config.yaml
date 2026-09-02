@@ -1,6 +1,6 @@
 name: "Hermes Agent"
 description: "Self-improving AI assistant powered by Hermes Agent from Nous Research"
-version: "0.5.11"
+version: "0.5.12"
 slug: "hermes"
 url: "https://github.com/NousResearch/hermes-agent"
 arch:
@@ -15,7 +15,7 @@ ports:
 ports_description:
   8642/tcp: "Hermes Gateway"
 map:
-  - config:rw
+  - homeassistant_config:rw
   - share:rw
 options: {}
 schema: {}
